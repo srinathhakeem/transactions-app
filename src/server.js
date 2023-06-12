@@ -18,18 +18,16 @@ app.get('/', (req, res) => res.status(200).send({
 }));
 
 const WriteTextToFileAsync = async (contentToWrite) => {
-   fs.readFile('./src/data.json',(err,content) =>{
-    if(err) throw err;
-    var parseJson = JSON.parse(content);
-    parseJson.push(contentToWrite);
-    fs.writeFile('./src/data.json', JSON.stringify(parseJson), (err) => {
+    // let parseJson = [];
+    // parseJson.push(contentToWrite);
+    fs.writeFile('./src/data.json', contentToWrite, (err) => {
       if(err) {
         console.log(err);
       } else {
         console.log('Done writing to file...');
       }
     })
-   })
+  //  })
     
   }
 

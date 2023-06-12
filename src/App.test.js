@@ -8,7 +8,7 @@ test('renders learn react link', () => {
 });*/
 import React from 'react';
 import { render, fireEvent, waitFor, screen } from '@testing-library/react';
-import axios from 'axios';
+import * as axios from 'axios';
 import { saveAs } from 'file-saver';
 import App from './App';
 

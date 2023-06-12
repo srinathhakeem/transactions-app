@@ -5,12 +5,10 @@ import { saveAs } from "file-saver";
 
 import Data from "./data.json";
 import LoginForm from './components/LoginForm/LoginForm';
-//import ResponsiveTable from './components/ResponsiveTable/ResponsiveTable'
 import Header from './components/Header/Header';
+import ResponsiveTable from './components/ResponsiveTable/ResponsiveTable';
 
 import './App.css'
-import PayingTransactions from './components/PayingTransactions/PayingTransactions';
-import ReceivingTransactions from './components/ReceivingTransactions/ReceivingTransactions';
 
 Modal.setAppElement('#root');
 
@@ -61,16 +59,16 @@ const App = () => {
       setAmount('');
       closeModal()
       // update write to json file
-      saveJson(newTransaction);
+      saveJson(transactionsData);
     } else {
       console.log('You are not authorized to add transactions.');
     }
   };
 
-  const saveJson =  (newTransaction) => {
+  const saveJson =  (transactionsData) => {
     // api URL // end point from node server / express server
       const url = 'http://localhost:3001/addTransaction'
-      axios.post(url, newTransaction)
+      axios.post(url, transactionsData)
       .then(function (response) {
         // console.log(response);
       })
@@ -81,6 +79,7 @@ const App = () => {
 
   const handleCompressTransactions = () => {
     const compressedTransactions = compress(transactions);
+    console.log('handleCompressTransactions', compressedTransactions);
     const csvContent = convertToCSV(compressedTransactions);
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8" });
     saveAs(blob, "compressed_transactions.csv");
@@ -106,16 +105,19 @@ const App = () => {
   });
 
   // Convert the compressed transactions object into an array
+  
   return Object.values(compressedTransactions);
   };
 
   const convertToCSV = (data) => {
+    console.log('converttocsv', data);
     const header = Object.keys(data[0]).join(",");
     const rows = data.map((transaction) => Object.values(transaction).join(","));
     return `${header}\n${rows.join("\n")}`;
   };
-  // const payingTransactions = transactions.filter((transaction) => transaction.amount < 0);
-  // const receivingTransactions = transactions.filter((transaction) => transaction.amount > 0);
+
+  const payingTransactions = transactions.filter((transaction) => transaction.amount < 0);
+  const receivingTransactions = transactions.filter((transaction) => transaction.amount > 0);
 
   return (
     <div className='container'>
@@ -131,17 +133,15 @@ const App = () => {
             <button className='button' onClick={openModal}>Add new Transaction</button>
           )}
           <button className='button' onClick={handleCompressTransactions}>Compress Transactions</button>
-          <div className='row'>
-            <PayingTransactions transactions={transactions}/>
-            <ReceivingTransactions transactions={transactions} />
-            {/* <div className='column'>
-            <h3 className='table__heading'>Paying Transactions</h3>
-            <ResponsiveTable data={payingTransactions}/>
-            </div> */}
-            {/* <div className='column'>
-            <h3 className='table__heading'>Receiving Transactions</h3>
-            <ResponsiveTable data={receivingTransactions}/>
-            </div> */}
+          <div className='table__container'>
+            <div className='table'>
+              <h3 className='table__heading'>Paying Transactions</h3>
+              <ResponsiveTable data={payingTransactions}/>
+            </div>
+            <div className='table'>
+              <h3 className='table__heading'>Receiving Transactions</h3>
+              <ResponsiveTable data={receivingTransactions}/>
+            </div>
           </div>
         </div>
         ) : (
