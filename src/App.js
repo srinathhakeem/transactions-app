@@ -6,7 +6,8 @@ import { saveAs } from "file-saver";
 import Data from "./data.json";
 import LoginForm from './components/LoginForm/LoginForm';
 import Header from './components/Header/Header';
-import ResponsiveTable from './components/ResponsiveTable/ResponsiveTable';
+import PayingTransactions from './components/Transactions/PayingTransactions/PayingTransactions'
+import ReceivingTransactions from './components/Transactions/ReceivingTransactions/ReceivingTransactions';
 
 import './App.css'
 
@@ -116,9 +117,6 @@ const App = () => {
     return `${header}\n${rows.join("\n")}`;
   };
 
-  const payingTransactions = transactions.filter((transaction) => transaction.amount < 0);
-  const receivingTransactions = transactions.filter((transaction) => transaction.amount > 0);
-
   return (
     <div className='container'>
       <Header />
@@ -134,14 +132,8 @@ const App = () => {
           )}
           <button className='button' onClick={handleCompressTransactions}>Compress Transactions</button>
           <div className='table__container'>
-            <div className='table'>
-              <h3 className='table__heading'>Paying Transactions</h3>
-              <ResponsiveTable data={payingTransactions}/>
-            </div>
-            <div className='table'>
-              <h3 className='table__heading'>Receiving Transactions</h3>
-              <ResponsiveTable data={receivingTransactions}/>
-            </div>
+            <PayingTransactions transactions={transactions}/>
+            <ReceivingTransactions transactions={transactions}/>
           </div>
         </div>
         ) : (

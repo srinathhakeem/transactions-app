@@ -29,5 +29,5 @@ export const TableRow = styled.tr`
 
 export const TableCell = styled.td`
   padding: 16px;
-  text-align: center
+  text-align: center;
 `;
